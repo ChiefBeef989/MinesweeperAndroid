@@ -26,7 +26,7 @@ public class MinesweeperView extends View {
     public touchModes currentMode = touchModes.UNCOVER;
     public GAMESTATUS gamestatus = GAMESTATUS.STARTUP;
 
-    int totalMines = 2;
+    int totalMines = 20;
     int minesLeftToPlace;
     int flagsPlaced = 0;
 
@@ -112,7 +112,6 @@ public class MinesweeperView extends View {
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-
         if(gameOver)
             return false;
 
