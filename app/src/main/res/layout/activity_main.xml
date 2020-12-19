@@ -20,7 +20,7 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="Total Mines:" />
+            android:text="20 Mines" />
 
         <TextView
             android:id="@+id/flagsSetText"
@@ -28,7 +28,7 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="Flags set:" />
+            android:text="Flags set: 0" />
 
     </LinearLayout>
 

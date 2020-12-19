@@ -4,7 +4,6 @@ public class MinesweeperField {
     private boolean isMine;
     private boolean isFlagged;
     private boolean isMined;
-    private int adjacentMines;
 
     private float startX, stopX, startY, stopY;
 
@@ -29,10 +28,6 @@ public class MinesweeperField {
         isMined = mined;
     }
 
-    public void setAdjacentMines(int adjacentMines) {
-        this.adjacentMines = adjacentMines;
-    }
-
     public boolean isMine() {
         return isMine;
     }
@@ -43,10 +38,6 @@ public class MinesweeperField {
 
     public boolean isMined() {
         return isMined;
-    }
-
-    public int getAdjacentMines() {
-        return adjacentMines;
     }
 
     public float getStartX() {
@@ -64,6 +55,4 @@ public class MinesweeperField {
     public float getStopY() {
         return stopY;
     }
-
-
 }
