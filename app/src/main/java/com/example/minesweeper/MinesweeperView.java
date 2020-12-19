@@ -12,6 +12,8 @@ import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 
+import java.util.Random;
+
 public class MinesweeperView extends View {
 
     float cHeight;
@@ -25,6 +27,8 @@ public class MinesweeperView extends View {
     public enum GAMESTATUS {STARTUP, PLAYING};
     public touchModes currentMode = touchModes.UNCOVER;
     public GAMESTATUS gamestatus = GAMESTATUS.STARTUP;
+
+    int minesToPlace = 10;
 
     MinesweeperField[][] fields = new MinesweeperField[10][10];
 
@@ -53,6 +57,25 @@ public class MinesweeperView extends View {
                 fields[i][j] = new MinesweeperField();
             }
         }
+
+        while (minesToPlace > 0){
+            for (int i = 0; i < fields.length; i++) {
+                for (int j = 0; j < fields[i].length; j++) {
+                    if(Math.random() > 0.8d && minesToPlace > 0){
+                        fields[i][j].setMine(true);
+                        minesToPlace--;
+                        Log.i("MINE PLACED", minesToPlace + "");
+                    }
+                }
+            }
+        }
+
+        for (int i = 0; i < fields.length; i++) {
+            for (int j = 0; j < fields[i].length; j++) {
+                if(fields[i][j].isMine())
+                    Log.i("[" + i + "]" + "[" + j + "]","MINED");
+            }
+        }
     }
 
     @Override
@@ -66,6 +89,10 @@ public class MinesweeperView extends View {
                 Log.i("TouchX", touchDownX + "");
                 Log.i("TouchY", touchDownY + "");
                 lastTouchedField = getTouchedField(touchDownX, touchDownY);
+
+                if(lastTouchedField == null || lastTouchedField.isMined())
+                    return false;
+
                 switch (currentMode) {
                     case UNCOVER:
                         lastTouchedField.setMined(true);
@@ -92,6 +119,15 @@ public class MinesweeperView extends View {
         Paint minedPaint = new Paint();
         minedPaint.setColor(Color.GRAY);
 
+        Paint minePaint = new Paint();
+        minePaint.setStyle(Paint.Style.FILL);
+        minePaint.setColor(Color.RED);
+
+        Paint text = new Paint();
+        text.setColor(Color.WHITE);
+        text.setStyle(Paint.Style.FILL);
+        text.setTextSize(100);
+        text.setTextAlign(Paint.Align.CENTER);
 
         cHeight = canvas.getHeight();
         cWidth = canvas.getWidth();
@@ -111,19 +147,19 @@ public class MinesweeperView extends View {
                         fields[i][j].setCoordinates(i * fieldWidth + 2, (i + 1) * fieldWidth - 2, j * fieldHeight + 2, (j + 1) * fieldHeight - 2);
                         break;
                     case PLAYING:
-                        if(fields[i][j].isMined())
+                        if(fields[i][j].isMine() && fields[i][j].isMined()){
+                            canvas.drawRect(fields[i][j].getStartX(),fields[i][j].getStartY(),fields[i][j].getStopX(),fields[i][j].getStopY(),minePaint);
+                            canvas.drawText("M",fields[i][j].getStopX() - fieldWidth/2,fields[i][j].getStopY()-fieldHeight/2,text);
+                            Log.i("MINE RENDERED", j + " " + i);
+                        }
+                        else if(fields[i][j].isMined() && !fields[i][j].isMine()){
                             canvas.drawRect(fields[i][j].getStartX(),fields[i][j].getStartY(),fields[i][j].getStopX(),fields[i][j].getStopY(),minedPaint);
+                        }
                         break;
                 }
             }
         }
         gamestatus = GAMESTATUS.PLAYING;
-
-        if(currentMode == touchModes.UNCOVER && lastTouchedField != null)
-        {
-            canvas.drawRect(lastTouchedField.getStartX(), lastTouchedField.getStartY(), lastTouchedField.getStopX(), lastTouchedField.getStopY(), minedPaint);
-            lastTouchedField = null;
-        }
     }
 
 
