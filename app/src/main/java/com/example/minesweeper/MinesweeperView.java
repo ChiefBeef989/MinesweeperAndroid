@@ -21,14 +21,14 @@ public class MinesweeperView extends View {
     float fieldHeight;
     float fieldWidth;
     Canvas playingField;
-    boolean startUp = true;
+    boolean gameOver;
 
     public enum touchModes {FLAG, UNCOVER};
     public enum GAMESTATUS {STARTUP, PLAYING};
     public touchModes currentMode = touchModes.UNCOVER;
     public GAMESTATUS gamestatus = GAMESTATUS.STARTUP;
 
-    int minesToPlace = 10;
+    int minesToPlace = 20;
 
     MinesweeperField[][] fields = new MinesweeperField[10][10];
 
@@ -51,7 +51,9 @@ public class MinesweeperView extends View {
         init();
     }
 
-    private void init() {
+    public void init() {
+        gameOver = false;
+
         for (int i = 0; i < fields.length; i++) {
             for (int j = 0; j < fields[i].length; j++) {
                 fields[i][j] = new MinesweeperField();
@@ -80,6 +82,9 @@ public class MinesweeperView extends View {
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
+
+        if(gameOver)
+            return false;
 
         float touchDownX = event.getX();
         float touchDownY = event.getY();
@@ -150,6 +155,7 @@ public class MinesweeperView extends View {
                         if(fields[i][j].isMine() && fields[i][j].isMined()){
                             canvas.drawRect(fields[i][j].getStartX(),fields[i][j].getStartY(),fields[i][j].getStopX(),fields[i][j].getStopY(),minePaint);
                             canvas.drawText("M",fields[i][j].getStopX() - fieldWidth/2,fields[i][j].getStopY()-fieldHeight/2,text);
+                            gameOver = true;
                             Log.i("MINE RENDERED", j + " " + i);
                         }
                         else if(fields[i][j].isMined() && !fields[i][j].isMine()){
