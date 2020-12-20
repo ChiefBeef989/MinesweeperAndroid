@@ -83,6 +83,61 @@ public class MinesweeperView extends View {
             }
         }
 
+        for (int i = 0; i < fields.length; i++) {
+            for (int j = 0; j < fields[i].length; j++) {
+                if(!fields[i][j].isMine()){
+                    try{
+                        if(fields[i-1][j-1].isMine())
+                            fields[i][j].setAdjacentMines(fields[i][j].getAdjacentMines()+1);
+                    } catch (IndexOutOfBoundsException e){
+                        Log.i("Out of bounds", e.getMessage());
+                    }
+                    try{
+                        if(fields[i-1][j].isMine())
+                            fields[i][j].setAdjacentMines(fields[i][j].getAdjacentMines()+1);
+                    } catch (IndexOutOfBoundsException e){
+                        Log.i("Out of bounds", e.getMessage());
+                    }
+                    try{
+                        if(fields[i-1][j+1].isMine())
+                            fields[i][j].setAdjacentMines(fields[i][j].getAdjacentMines()+1);
+                    } catch (IndexOutOfBoundsException e){
+                        Log.i("Out of bounds", e.getMessage());
+                    }
+                    try{
+                        if(fields[i][j-1].isMine())
+                            fields[i][j].setAdjacentMines(fields[i][j].getAdjacentMines()+1);
+                    } catch (IndexOutOfBoundsException e){
+                        Log.i("Out of bounds", e.getMessage());
+                    }
+                    try{
+                        if(fields[i][j+1].isMine())
+                            fields[i][j].setAdjacentMines(fields[i][j].getAdjacentMines()+1);
+                    } catch (IndexOutOfBoundsException e){
+                        Log.i("Out of bounds", e.getMessage());
+                    }
+                    try{
+                        if(fields[i+1][j-1].isMine())
+                            fields[i][j].setAdjacentMines(fields[i][j].getAdjacentMines()+1);
+                    } catch (IndexOutOfBoundsException e){
+                        Log.i("Out of bounds", e.getMessage());
+                    }
+                    try{
+                        if(fields[i+1][j].isMine())
+                            fields[i][j].setAdjacentMines(fields[i][j].getAdjacentMines()+1);
+                    } catch (IndexOutOfBoundsException e){
+                        Log.i("Out of bounds", e.getMessage());
+                    }
+                    try{
+                        if(fields[i+1][j+1].isMine())
+                            fields[i][j].setAdjacentMines(fields[i][j].getAdjacentMines()+1);
+                    } catch (IndexOutOfBoundsException e){
+                        Log.i("Out of bounds", e.getMessage());
+                    }
+                }
+            }
+        }
+
         lines = new Paint();
         lines.setColor(Color.WHITE);
         lines.setStrokeWidth(4f);
@@ -191,6 +246,8 @@ public class MinesweeperView extends View {
                         }
                         else if(fields[i][j].isMined() && !fields[i][j].isMine()){
                             canvas.drawRect(fields[i][j].getStartX(),fields[i][j].getStartY(),fields[i][j].getStopX(),fields[i][j].getStopY(),minedPaint);
+                            if(fields[i][j].getAdjacentMines() > 0)
+                                canvas.drawText(fields[i][j].getAdjacentMines() + "",fields[i][j].getStopX() - fieldWidth/2,fields[i][j].getStopY()-fieldHeight/2,text);
                         }
                         else if(fields[i][j].isFlagged() && !fields[i][j].isMined())
                             canvas.drawRect(fields[i][j].getStartX(),fields[i][j].getStartY(),fields[i][j].getStopX(),fields[i][j].getStopY(),flagPaint);
